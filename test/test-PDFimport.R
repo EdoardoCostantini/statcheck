@@ -18,9 +18,9 @@ source("/Users/Edoardo/DriveUni/gh-statcheck/extra/02FunctionToCleanStatcheckDat
 #checkPDF("./extra/McGrawTetlock2005.pdf")
 
 # Import reference data (e.g. manually coded plos)
-  reff_input <- read.xls("/Users/Edoardo/DriveUni/gh-statcheck/extra/150702ComparePvaluesPLOSStatcheckOrderedCleaned.xlsx")
-  colnames(reff_input)
-  reff_input <- reff_input[, c(1,  #authors
+  ref_input <- read.xls("/Users/Edoardo/DriveUni/gh-statcheck/extra/150702ComparePvaluesPLOSStatcheckOrderedCleaned.xlsx")
+  colnames(ref_input)
+  ref_input <- ref_input[, c(1,  #authors
                               9,  #plos error (logical version)
                               12, #plos decision error
                               21, #stat error (1-tail yes)
@@ -31,28 +31,28 @@ source("/Users/Edoardo/DriveUni/gh-statcheck/extra/02FunctionToCleanStatcheckDat
                           ]
   # Select article of interest
     # Right now using first two articles
-      unique(reff_input[reff_input$discrepancyInclusion == TRUE, 1])
-      reff_input <- reff_input[reff_input[, 1] == "Ames,-Daniel-R" | reff_input[, 1] == "Beaman,-CPhilip", ]
+      unique(ref_input[ref_input$discrepancyInclusion == TRUE, 1])
+      ref_input <- ref_input[ref_input[, 1] == "Ames,-Daniel-R" | ref_input[, 1] == "Beaman,-CPhilip", ]
     # Define the comparison terms
-      reff_ext   <- nrow(reff_input)            # assuming the manual checks are correct
-      reff_er    <- sum(na.omit(reff_input$plosError))
-      reff_decEr <- sum(na.omit(reff_input$plosDecisionError))
+      ref_ext   <- nrow(ref_input)            # assuming the manual checks are correct
+      ref_er    <- sum(na.omit(ref_input$plosError))
+      ref_decEr <- sum(na.omit(ref_input$plosDecisionError))
 
 # Get statcheck output for the selected articles
   # This will be input for your test
-    stat_input <- checkHTMLdir("/Users/Edoardo/DriveUni/gh-statcheck/extra/articles")
+    sttchckOutput <- checkHTMLdir("/Users/Edoardo/DriveUni/gh-statcheck/extra/articles")
     
   #test set
   test_that('TEST: # of extractions', {
     #expectations
-    expect_equal(nrow(stat_input), reff_ext)
+    expect_equal(nrow(sttchckOutput), ref_ext)
   })
   test_that('TEST: # of errors', {
     #expectations
-    expect_equal(sum(stat_input$Error), reff_er)
+    expect_equal(sum(sttchckOutput$Error), ref_er)
   })
   test_that('TEST: # of decision errors', {
-    expect_equal(sum(stat_input$DecisionError), reff_decEr)
+    expect_equal(sum(sttchckOutput$DecisionError), ref_decEr)
   })
 
 # # OLD WORKING #
