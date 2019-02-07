@@ -1,4 +1,5 @@
 # Test Suite
+library(testthat)
 # Check basics (extractions, )
 test_file("PDFimport-test.R")
 # 16 more extractions than in reference

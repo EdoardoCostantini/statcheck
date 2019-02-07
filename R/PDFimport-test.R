@@ -33,31 +33,16 @@ source("/Users/Edoardo/DriveUni/gh-statcheck/extra/02FunctionToCleanStatcheckDat
     # Right now using first two articles
       unique(reff_input[reff_input$discrepancyInclusion == TRUE, 1])
       reff_input <- reff_input[reff_input[, 1] == "Ames,-Daniel-R" | reff_input[, 1] == "Beaman,-CPhilip", ]
-    # Trying to select articles that do not have inclusion errors
-      # inv_index <- unique(reff_input[reff_input$discrepancyInclusion==TRUE, 1]) # articles w/ inclusion error
-      # reff_input[-inv_index, 1]
     # Define the comparison terms
       reff_ext   <- nrow(reff_input)            # assuming the manual checks are correct
       reff_er    <- sum(na.omit(reff_input$plosError))
       reff_decEr <- sum(na.omit(reff_input$plosDecisionError))
 
 # Get statcheck output for the selected articles
-  # load data for cleaning
-  # plosdata_loc <- "/Users/Edoardo/DriveUni/gh-statcheck/extra/ManuallyCodedComparisonSample.txt"
-  # plosdata <- read.table(plosdata_loc, header = TRUE, sep = "\t")
-      
   # This will be input for your test
-    # stat_input <- checkPDFdir("/Users/Edoardo/DriveUni/gh-statcheck/extra/articles")
-    # stat_input <- checkdir("/Users/Edoardo/DriveUni/gh-statcheck/extra/articles")
-    
     stat_input <- checkHTMLdir("/Users/Edoardo/DriveUni/gh-statcheck/extra/articles")
-    # stat_input <- clean_stat(stat_input, plosdata = plosdata)
     
-    #stat_input1 <- checkHTML("/Users/Edoardo/DriveUni/gh-statcheck/extra/articles/Ames2004.htm")
-    #stat_input2 <- checkHTML("/Users/Edoardo/DriveUni/gh-statcheck/extra/articles/Beaman2004.htm")
-    #stat_input <- rbind(stat_input1, stat_input2)
-    
-  #test group
+  #test set
   test_that('TEST: # of extractions', {
     #expectations
     expect_equal(nrow(stat_input), reff_ext)
