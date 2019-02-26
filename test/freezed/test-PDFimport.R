@@ -1,6 +1,6 @@
 # Testing PDF function
 #context
-context('PDF EXTRACTION')
+context('PDF IMPORT')
 
 library(testthat)
 library(plyr)
@@ -20,7 +20,7 @@ source("/Users/Edoardo/DriveUni/gh-statcheck/extra/02FunctionToCleanStatcheckDat
 # Import reference data (e.g. manually coded plos)
   ref_input <- read.xls("/Users/Edoardo/DriveUni/gh-statcheck/extra/150702ComparePvaluesPLOSStatcheckOrderedCleaned.xlsx")
   colnames(ref_input)
-  ref_input <- ref_input[, c(1,  #authors
+  ref_input <- ref_input[, c(1,   #authors
                               9,  #plos error (logical version)
                               12, #plos decision error
                               21, #stat error (1-tail yes)
