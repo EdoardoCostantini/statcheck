@@ -11,7 +11,8 @@ context('STATCHEK: should extract')
   library(plyr)
   source("../R/statcheck.R")
 
-# Define test texts ####
+
+# Define test texts -------------------------------------------------------
   #> Comparison sings ####
     txt_compsign <- paste("Correct way of reporting t test: t(48) = 1.02, p = .05",
                           "Correct way of reporting t test: t(48) = 1.02, p > .05.",
@@ -39,7 +40,8 @@ context('STATCHEK: should extract')
                       "Correct way of reporting chi-sq test: x2 (2, N = 170) = 14.14, P = .0008502331")
     #statcheck(txt_caps)
 
-# Define tests of interest ####
+
+# Define tests of interest ------------------------------------------------
   #> Different comparison sings (<, >, =) ####
   quiet( tocheck   <- nrow(statcheck(txt_compsign)) ) # num of tests statcheck able to extract
   quiet( benchmark <- nrow(statcheck::statcheck(txt_compsign)) ) # define benchmark based on how many tests whould be read 
