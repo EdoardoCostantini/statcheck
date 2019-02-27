@@ -34,12 +34,12 @@ checkPDFdir <-
     if (length(files) == 0)
       stop("No PDF found")
     
-    txts <- character(length(files))
+    txts <- vector("list", length(files)) #original: character(length(files))
     message("Importing PDF files...")
     pb <- txtProgressBar(max = length(files), style = 3)
     for (i in 1:length(files))
     {
-      txts[i] <-  getPDF(files[i])
+      txts[[i]] <-  pdf_text(files[i]) # original has "getPDF" instead of "pdf_text"; txts[i] (but gets only first page?)
       setTxtProgressBar(pb, i)
     }
     close(pb)
@@ -53,7 +53,7 @@ checkPDF <-
     if (missing(files))
       files <- tk_choose.files()
     
-    txts <-  sapply(files, getPDF)
+    txts <-  sapply(files, pdf_text) # original has "getPDF" instead of "pdf_text"
     names(txts) <-
       gsub("\\.pdf$", "", basename(files), perl = TRUE)
     return(statcheck(txts, ...))
