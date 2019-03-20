@@ -1,6 +1,6 @@
 # Testing PDFimport function
 
-context('PDF IMPORT: checkPDFdir (test w/ CRAN ref)')
+context('HTML IMPORT: checkHTLMdir (test w/ CRAN ref)')
 
 #setwd("/Users/Edoardo/DriveUni/gh-statcheck/test")
   # because of the way autotest work, I assume the folder is
@@ -10,15 +10,15 @@ context('PDF IMPORT: checkPDFdir (test w/ CRAN ref)')
 # Set up (after context)
   library(plyr)
   source("../R/statcheck.R")
-  source("../R/PDFimport.R")
+  source("../R/htmlImport.R")
 
 # Define test texts -------------------------------------------------------
   # Define path to example pdf
     x <- "../extra/articles/"
   # Get output from working and stable function
-    quiet(working_out <- checkPDFdir(x))            # output from working version
-    quiet(stable_out  <- statcheck::checkPDFdir(x)) # output from stable version
-    
+    quiet(working_out <- checkHTMLdir(x))           # output from working version
+    quiet(stable_out <- statcheck::checkHTMLdir(x)) # output from stable version
+
 # Define tests of interest ------------------------------------------------
   #> Number of extractions ####
   tocheck   <- nrow(working_out)

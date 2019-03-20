@@ -1,6 +1,6 @@
 # Testing statcheck function
 
-context('STATCHEK: should NOT extract')
+context('STATCHEK: do NOT extract')
 
 #setwd("/Users/Edoardo/DriveUni/gh-statcheck/test")
   # because of the way autotest work, I assume the folder is
@@ -11,46 +11,70 @@ context('STATCHEK: should NOT extract')
   library(plyr)
   source("../R/statcheck.R")
 
-# Define test texts ####
-  #> Invalid p-values ####
-    txt_invP <- paste("Correct way of reporting t test: t(48) = 1.02, p = 1",
-                      "Correct way of reporting t test: t(48) = 1.02, p = 1.01",
-                      "Correct way of reporting t test: t(48) = 1.02, p > 1",
-                      "Correct way of reporting t test: t(48) = 1.02, p < 0",
-                      "Correct way of reporting t test: t(48) = 1.02, p = -.01"
+#Test: Invalid p-values ####
+        
+  # Text Strings
+    txt_invP <- c("A test that should not be read: t(48) = 1.02, p = 1",
+                  "A test that should not be read: t(48) = 1.02, p = 1.01",
+                  "A test that should not be read: t(48) = 1.02, p > 1",
+                  "A test that should not be read: t(48) = 1.02, p < 0",
+                  #"Correct way of reporting t test: t(48) = 1.02, p = .05", #use to check if test works
+                  "A test that should not be read: t(48) = 1.02, p = -.01"
     )
     # you may simply add any other invalid pvalue you want to keep track of
     #statcheck(txt_invP)
     
-  #> Non-apa style: semi-colon instead of comma ####
-    txt_semico <- paste("Correct way of reporting t test: t(48) = 1.02; p = .3128421")
-    #statcheck(txt_testsign)
+  # benchmark and tocheck
+    benchmark <- 0                               # for every test in this context (will not repeat definition)
+    quiet( nextra <- nrow(statcheck(txt_invP)) ) # number of extractions
+    if( is.null( nextra ) == TRUE ){
+      tocheck <- 0
+    } else {
+      tocheck <- nrow(statcheck(txt_invP))
+    }
+    #tocheck <- 1
     
-  #> Non-apa style: brakets (squraed instead of round) ####
-    txt_brakets <- paste("Correct way of reporting t test: t[48] = 1.02; p = .3128421")
-    #statcheck(txt_brakets)
-    
-# Define tests of interest ####
-  #> Invalid p-values ####
-    quiet( tocheck   <- is.null(statcheck(txt_invP)) ) # num of tests statcheck able to extract
-    quiet( benchmark <- is.null(statcheck::statcheck(txt_invP)) ) # define benchmark based on how many tests whould be read 
-                     # (defined number of recognized tests by stable version of
-                     # statcheck applied to txt_spaces object)
-    #tocheck <- FALSE
+  # Test
     test_that("TEST: Invalid p-values", {
       expect_equal(tocheck, benchmark)
     })
     
-  #> Non-APA: semi-colon instead of comma ####
-    quiet( tocheck   <- is.null(statcheck(txt_semico)) ) # num of tests statcheck able to extract
-    quiet( benchmark <- is.null(statcheck::statcheck(txt_semico)) ) # define benchmark based on how many tests whould be read 
+#Test: Non-APA: semi-colon instead of comma ####
+    
+  # Text Strings
+    txt_semico <- c("Correct way of reporting t test: t(48) = 1.02; p = .3128421")
+    #statcheck(txt_testsign)
+    
+  # tocheck
+    quiet( nextra <- nrow(statcheck(txt_semico)) ) # number of extractions
+    if( is.null( nextra ) == TRUE ){
+      tocheck <- 0
+    } else {
+      tocheck <- nrow(statcheck(txt_semico))
+    }
+    
+  # Test
     test_that('TEST: Non-APA: semi-colon instead of comma', {
       expect_equal(tocheck, benchmark)
     })
   
-  #> Non-APA: brakets (squraed instead of round) ####
-    quiet( tocheck   <- is.null(statcheck(txt_brakets)) ) # num of tests statcheck able to extract
-    quiet( benchmark <- is.null(statcheck::statcheck(txt_brakets)) ) # define benchmark based on how many tests whould be read 
+#Test: Non-APA: brakets (squraed instead of round) ####
+
+  # Text Strings
+    txt_brakets <- c("Correct way of reporting t test: t[48] = 1.02; p = .3128421")
+    #statcheck(txt_brakets)
+    
+  # tocheck
+    quiet( nextra <- nrow(statcheck(txt_brakets)) ) # number of extractions
+    if( is.null( nextra ) == TRUE ){
+      tocheck <- 0
+    } else {
+      tocheck <- nrow(statcheck(txt_brakets))
+    }
+    
+  # Test
     test_that('TEST: Non-APA: brakets (squraed instead of round)', {
       expect_equal(tocheck, benchmark)
     })
+
+    

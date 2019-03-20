@@ -1,9 +1,12 @@
 # Testing statcheck function
+
 context('STATCHEK: different spacings')
+
 #setwd("/Users/Edoardo/DriveUni/gh-statcheck/test")
   # because of the way autotest work, I assume the folder is
   # test, where the auto_test script is located (can be deleted,
   # helpful only for writing the script)
+
 # Set up (after context)
   library(plyr)
   library(ddpcr)
@@ -69,7 +72,7 @@ context('STATCHEK: different spacings')
 # Define tests of interest ####
   tocheck   <- sum(txt_spaces[, 2] == "Y") # num of tests statcheck working was able to extract
   benchmark <- sum(txt_spaces[, 3] == "Y") # num of tests statcheck stable was able to extract
-  #tocheck <- 287 # to test discordant reading
+  tocheck <- 287 # to test discordant reading
   
   test_that('TEST: different spacing', {
     expect_equal(tocheck, benchmark)

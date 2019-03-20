@@ -1,6 +1,6 @@
 # Testing PDFimport function
 
-context('PDF IMPORT: checkPDF')
+context('PDF IMPORT: checkPDF (test w/ CRAN ref)')
 
 #setwd("/Users/Edoardo/DriveUni/gh-statcheck/test")
   # because of the way autotest work, I assume the folder is

@@ -1,5 +1,6 @@
 # Test Suite
 library(testthat)
+library(ddpcr)
 
 # Set up
   # ! WD: should be project location (main folder)

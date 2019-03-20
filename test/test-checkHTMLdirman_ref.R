@@ -1,21 +1,29 @@
-# Testing HTLM function
-context('HTML IMPORT')
+# Testing checkHTMLdir function (w/ manually coded reference)
+
+context('HTML IMPORT: checkHTMLdir (test w/ manual reference)')
+
 #setwd("/Users/Edoardo/DriveUni/gh-statcheck/test")
   # because of the way autotest work, I assume the folder is
   # test, where the auto_test script is located (can be deleted,
   # helpful only for writing the script)
+
 # Set up (after context)
+
+  # packages
+  
+  library(testthat)
+  library(plyr) # for function ddply (need for the auto_test feature)
 
   # Locations and references specification
 
-  testObj <- list(artdir = "../extra/articles",
+  testObj <- list(artdir = "../extra/testHTMLdir_articles",
                     # The user specifies the directory containing all the articles of 
                     # interest in HTML format.
                     # RELATIVE PATH: running the autotest will set the wd to the directory
                     # where the script containing the function auto_test is. To specify relative
                     # path keep this in mind.
                     
-                  reffile = "../extra/ManuallyCodedComparisonSample.csv",
+                  reffile = "../extra/testHTMLdir_articles/manuallycoded.csv",
                     # The user specifies the path to the file (txt for now) that 
                     # reports the manually coded results.
                     # Can give both txt or csv (not csv2)
@@ -41,11 +49,6 @@ context('HTML IMPORT')
     # of options tested with a specific test-script
   attach(statOpt)
   
-  # packages
-  
-  library(testthat)
-  library(plyr) # for function ddply (need for the auto_test feature)
-  
   # Source Functions to be tested
   
   source("../R/statcheck.R")
@@ -62,19 +65,10 @@ context('HTML IMPORT')
     ref_input <- read.table(reffile, header = TRUE)
   }
   
-  if(is.numeric(erros_indx) == TRUE){
-    ref_input <- ref_input[, c(erros_indx[1], erros_indx[2])]
-  } else {
-    ref_input <- ref_input[, colnames(ref_input) == erros_indx[1] | colnames(ref_input) == erros_indx[2]]
-  }
+  ref_input <- ref_input[, c(erros_indx[1], erros_indx[2])]
     # allows to specify the columns containing error and decision erros
     # both as character (names of columns) and as number (e.g. 3rd and 4th columns)
   
-  ref_ext   <- nrow(ref_input)              # reference number of extractions     
-  ref_er    <- sum(na.omit(ref_input[, 1])) # reference number of erros
-  ref_decEr <- sum(na.omit(ref_input[, 2])) # reference number of decision errors
-    # Define the comparison terms
-
 # Get statcheck output for the selected articles
   sttchckOutput <- checkHTMLdir(artdir, stat = stat,
                                 OneTailedTests = OneTailedTests, 
@@ -87,14 +81,37 @@ context('HTML IMPORT')
     # Such arguments will define the way the user wants to
     # use statcheck for a specific testing purpose
     
-# Define tests of interest
-  test_that('TEST: # of extractions', {
-    expect_equal(nrow(sttchckOutput), ref_ext)
-  })
-  test_that('TEST: # of errors', {
-    expect_equal(sum(sttchckOutput$Error), ref_er)
-  })
-  test_that('TEST: # of decision errors', {
-    expect_equal(sum(sttchckOutput$DecisionError), ref_decEr)
-  })
+#Test: Number of extractions ####
   
+  # benchmark and tocheck (aka actual extractions)
+  benchmark <- nrow(ref_input)              # reference number of extractions     
+  tocheck   <- nrow(sttchckOutput)
+  
+  # test
+  test_that('TEST: Number of extractions', {
+    expect_equal(tocheck, benchmark)
+  })
+
+
+#Test: Number of Errors ####
+
+  # benchmark and tocheck (aka actual extractions)
+  benchmark <- sum(na.omit(ref_input[, 1])) # reference number of erros
+  tocheck   <- sum(sttchckOutput$Error)
+  
+  # test
+  test_that('TEST: Number of errors', {
+    expect_equal(tocheck, benchmark)
+  })
+
+#Test: Number of decision errors ####
+  
+  # benchmark and tocheck
+  benchmark <- sum(na.omit(ref_input[, 2])) # reference number of decision errors
+  tocheck   <- sum(sttchckOutput$DecisionError)
+  
+  # test
+  test_that('TEST: Number of decision errors', {
+    expect_equal(tocheck, benchmark)
+  })
+    
