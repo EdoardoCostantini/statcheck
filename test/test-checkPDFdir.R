@@ -8,7 +8,9 @@ context('PDF IMPORT: checkPDFdir (test w/ CRAN ref)')
   # helpful only for writing the script)
 
 # Set up (after context)
+  #library(ddpcr)
   library(plyr)
+  library(stringi) # need for the getPDF function
   source("../R/statcheck.R")
   source("../R/PDFimport.R")
 

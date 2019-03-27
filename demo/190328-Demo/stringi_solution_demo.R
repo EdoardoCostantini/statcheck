@@ -8,6 +8,7 @@
 # Install Packages
   install.packages("pdftools")
   install.packages("stringi")
+  install.packages("Rcpp") # for the uni computers (alwyas need to update this package)
 
 # Load Packages and functions
   library(pdftools)
@@ -18,9 +19,10 @@
   source("./PDFimport.R")
   
 # Load Articles (two articles for this demo)
-  x <- "./Ames2004.pdf"   # real paper not working (nothing is able to read the "=") page 4 for tests
-  x <- "./Beaman2004.pdf" # real paper not working (nothing is able to read the "=") page 3 for tests
-  page_of_int <- 4
+  x <- "./Ames2004.pdf"   # page 4 for tests; page 10 for a chi-square
+  x <- "./Beaman2004.pdf" # page 3 for tests
+  x <- "./PDF-PB-2009-Den.pdf" # page 15 chi square at the end
+  page_of_int <- 15
   
 # One page exposé ---------------------------------------------------------
     
@@ -28,10 +30,14 @@
     text_output_nostrin <- pdftools::pdf_text(x)[[page_of_int]]
     text_output <- stri_enc_toutf32(pdftools::pdf_text(x)[[page_of_int]])
   # 2. Peak at the last 30ish values (there should be an equal sing there)
-    tail(text_output[[1]], 30)
+    tail(text_output[[1]], 300)
   # 3. Substitute codes
     text_output[[1]][which(text_output[[1]] == 11005)] <- 61
+      # double solidous is 11005 in UTF-32 decimal http://www.fileformat.info/info/unicode/char/2afd/index.htm
     text_output[[1]][which(text_output[[1]] == 11021)] <- 60
+    text_output[[1]][which(text_output[[1]] == 11002)] <- 45
+    text_output[[1]][which(text_output[[1]] == 9273)] <- 967
+    text_output[[1]][which(text_output[[1]] == 9253)] <- 947
   # 4. Get things back in UTF8
     text_output_nostrin[[1]]
     stri_enc_fromutf32(tail(text_output[[1]], 7500))
@@ -45,35 +51,22 @@
     str(text_output) # an object per page
     
   # 2. Peak at the last 30ish values (there should be an equal sing there)
-    tail(text_output[[4]], 30)
+    tail(text_output[[page_of_int]], 300)
     
   # 3. Substitute codes
-    # Detect how many double solidus bars
-    which.11005.detect <- function(x) {which(x == 11005)} 
-    lapply(text_output, which.11005.detect)
-    
-    # Substitute double solidus bars with UTF36 code 61 (aka = sign)
-    which.11005.substi <- function(x) {
-      x[which(x == 11005)] <- 61
-      return(x)
-    }
-    out_61 <- lapply(text_output, which.11005.substi)
-  
-    lapply(out_61, which.11005.detect) #check how many double solidus in the form of 11005 are there: ZERO!
-    
-    # Substitute \u2b0d with UTF36 code 60 (aka < sign)
-    which.11021.substi <- function(x) {
-      x[which(x == 11021)] <- 60
-      return(x)
-    }
-    out_61_60 <- lapply(out_61, which.11021.substi)
-    
+    # Replace known wierd characters
+    txtfiles <- lapply(text_output, gsub, pattern = "11005", replacement = "61", fixed = TRUE) # substitute double solidous (UTF-32 Decimal 11005) with equal sign (UTF-32 Decimal 61)
+    txtfiles <- lapply(txtfiles, gsub, pattern = "11021", replacement = "60", fixed = TRUE) # substitute up down black arrow (UTF-32 Decimal \u2b0d) with equal less than sign (UTF-32 Decimal 60)
+    txtfiles <- lapply(txtfiles, gsub, pattern = "11002", replacement = "45", fixed = TRUE) # substitute U+2AFA (UTF-32 Decimal 11002) with HYPHEN-MINUS sign (UTF-32 Decimal 45) [issue in JPSP]
+    txtfiles <- lapply(txtfiles, gsub, pattern = "9273", replacement = "967", fixed = TRUE) # substitute \u2439 (UTF-32 Decimal 9273) with small greek chi (UTF-32 Decimal 967)
+    txtfiles <- lapply(txtfiles, gsub, pattern = "9253", replacement = "947", fixed = TRUE) # substitute \u03B3 (UTF-32 Decimal 9253) with small greek chi (UTF-32 Decimal 947)
+ 
   # 4. Get things back in UTF8
-    stri_enc_fromutf32(out_61_60)
+    txtfiles <- stri_enc_fromutf32(txtfiles)
     
   # 5. Apply statcheck (happly and produly)
-    statcheck(stri_enc_fromutf32(out_61_60))
-    nrow(statcheck(stri_enc_fromutf32(out_61_60)))
+    statcheck(txtfiles)
+    nrow(statcheck(txtfiles))
     
   # 6. CFR w/ other methods
     # XPDF (current version)
