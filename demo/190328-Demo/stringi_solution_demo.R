@@ -19,14 +19,14 @@
   source("./PDFimport.R")
   
 # Load Articles (two articles for this demo)
-  x <- "./Ames2004.pdf"   # page 4 for tests; page 10 for a chi-square
-  x <- "./Beaman2004.pdf" # page 3 for tests
+  x <- "./Ames2004.pdf"        # page 4 for tests; page 10 for a chi-square
+  x <- "./Beaman2004.pdf"      # page 3 for tests
   x <- "./PDF-PB-2009-Den.pdf" # page 15 chi square at the end
-  page_of_int <- 15
+  page_of_int <- 4
   
 # One page exposé ---------------------------------------------------------
     
-  # 1. Show output of pdf_text(x) in UTF32 encoding
+  # 1. Show output of pdf_text(x) in UTF32 decimal encoding
     text_output_nostrin <- pdftools::pdf_text(x)[[page_of_int]]
     text_output <- stri_enc_toutf32(pdftools::pdf_text(x)[[page_of_int]])
   # 2. Peak at the last 30ish values (there should be an equal sing there)
@@ -40,7 +40,7 @@
     text_output[[1]][which(text_output[[1]] == 9253)] <- 947
   # 4. Get things back in UTF8
     text_output_nostrin[[1]]
-    stri_enc_fromutf32(tail(text_output[[1]], 7500))
+    stri_enc_fromutf32(text_output[[1]])
   # 5. Apply statcheck (happly and produly)
     statcheck(stri_enc_fromutf32(text_output[[1]]))
 

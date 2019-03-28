@@ -1,4 +1,14 @@
-# Testing PDFimport function
+### Project:     statcheck traineeship
+### Object:      checkHTML function test
+### Description: This script tests whether the extractions done using the stable version of checkHTML (on CRAN) and
+###              the version on which you are working on are giving the same results when applied to a dummy article
+###              containing a series of test of interest.
+###              The criteria of comparison are: number of extractions, number of errors, number of decision errors
+### Requirements: (1) having a dummy article; (2) specify a path to it (object x below)
+### How to use:  - set path to local statcheck and htmlImport scripts (containing the versions of the function you are working on)
+###              - set path to dummy article
+###              - run the suite.R script which is contained in the same folder as this script
+### Date:        2019-03-20
 
 context('HTML IMPORT: checkHTLM (test w/ CRAN ref)')
 
@@ -14,7 +24,7 @@ context('HTML IMPORT: checkHTLM (test w/ CRAN ref)')
 
 # Define test texts -------------------------------------------------------
   # Define path to example pdf
-    x <- "../extra/articles/TrialArt.html"
+    x <- "../extra/articles/HTM-AAA-TrialArticle.htm" 
   # Get output from working and stable function
     quiet(working_out <- checkHTML(x))           # output from working version
     quiet(stable_out <- statcheck::checkHTML(x)) # output from stable version

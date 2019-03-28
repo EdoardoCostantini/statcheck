@@ -1,4 +1,16 @@
-# Test Suite
+### Project:     statcheck traineeship
+### Object:      Test Suite
+### Description: When run, this script starts a continuous testing session that runs all the tests contained in a
+###              test folder (defined w/ obj test_path) using functions contained in a code folder (located w/ code_path).
+###              Everytime something changes in one of the two folders, the tests are automatically run again.
+###              You can change the reporting layout with the reporter option in the auto_test function (see below)
+### Requirements: (1) specify location to code_path; (2) specify path to test_path
+###               (3) all tests scripts in the test_path folder should be named "test-***"
+###               (4) suite.R and all the test scripts should be in the same "test" sub-folder of your project
+### How to use:  - set paths
+###              - run autotest function
+### Date:        2019-03-20
+
 library(testthat)
 library(ddpcr)
 
