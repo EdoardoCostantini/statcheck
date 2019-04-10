@@ -9,7 +9,8 @@
   install.packages("pdftools")
   install.packages("stringi")
   install.packages("Rcpp") # for the uni computers (alwyas need to update this package)
-
+  install.packages("plyr") # for the uni computers (alwyas need to update this package)
+  
 # Load Packages and functions
   library(pdftools)
   library(stringi)
@@ -17,6 +18,17 @@
   source("./statcheck.R")
   source("./htmlImport.R")
   source("./PDFimport.R")
+  
+# Native Encoding 
+  Sys.getlocale(category = "LC_ALL")                         # get native encoding for system
+  # Changing locale.
+  # useful source: https://stackoverflow.com/questions/23324872/rstudio-not-picking-the-encoding-im-telling-it-to-use-when-reading-a-file
+  # 1. go to terminal and check what are the encodings supported by you computer paste: locale -m
+  # 2. set
+  Sys.setlocale("LC_ALL", "pt_PT.ISO8859-1")                 # different locale do not matter!!
+  Sys.setlocale("LC_ALL", "pt_PT.1252")        # whether we can do this depends on the system, 
+                                               # so this is not a viable option unfortunately
+  Sys.setlocale(category = "LC_ALL", locale = "en_US.UTF-8") # cant force Windows to do this
   
 # Load Articles (two articles for this demo)
   x <- "./Ames2004.pdf"        # page 4 for tests; page 10 for a chi-square

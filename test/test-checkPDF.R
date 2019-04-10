@@ -19,8 +19,8 @@ context('PDF IMPORT: checkPDF (test w/ CRAN ref)')
 
 # Set up (after context)
   #library(ddpcr)
-  library(plyr)
-  library(stringi) # need for the getPDF function
+  #library(stringi) # need for the getPDF function
+  #library(plyr)
   source("../R/statcheck.R")
   source("../R/PDFimport.R")
 

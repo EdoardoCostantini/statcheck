@@ -13,6 +13,8 @@
 
 library(testthat)
 library(ddpcr)
+library(stringi)
+library(plyr)
 
 # Set up
   # ! WD: should be project location (main folder)
