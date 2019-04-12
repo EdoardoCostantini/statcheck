@@ -1,10 +1,10 @@
 ### Project:     statcheck traineeship
 ### Object:      checkPDFdir function test
-### Description: This script tests whether the extractions done using the stable version of checkPDFdir (on CRAN) and
-###              the version on which you are working on are giving the same results when applied to all the pdf 
-###              articles contained in a defined folder.
-###              The criteria of comparison are: number of extractions, number of errors, number of decision errors
-### Requirements: (1) having a folder full of articles; (2) specify a path to it (object x below)
+### Description: This script contains some working scripts to test whether the extraction perfomrances
+###              of different getPDF functions when applying statcheck function to their output.
+###              The criteria of comparison are: number of extractions, number of errors, number of decision errors.
+### Requirements: (1) having a folder full of articles; (2) specifying a path to it (object 'x' below)
+### (3) having statcheck, PDFimport, and pdf_columns
 ### How to use:  - set path to local statcheck and htmlImport scripts (containing the versions of the function you are working on)
 ###              - set path to folder containing all reals test articles
 ###              - run the suite.R script which is contained in the same folder as this script
