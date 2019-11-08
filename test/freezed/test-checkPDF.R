@@ -52,6 +52,7 @@ context('PDF IMPORT: checkPDF output local = CRAN')
 
   benchmark <- nrow(stable_out)
   
+  #tocheck <- 2
   test_that('TEST: Number of extractions', {
     expect_equal(tocheck, benchmark)
   })

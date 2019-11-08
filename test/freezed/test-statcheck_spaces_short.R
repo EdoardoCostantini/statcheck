@@ -1,4 +1,16 @@
-# Testing statcheck function
+### Project:     statcheck traineeship
+### Object:      Testing local statcheck reads what it should
+### Description: This script tests whether the local version of statcheck DOES
+###              read statistics reported in ways we DO want to read.
+###              The unwanted results controlled: 1) Different comparison signs, 
+###                                               2) Positive/Negative stats, 
+###                                               3) Different caps
+###              any other result of interest can easly be added with another test
+### Requirements: (1) local statcheck function (the one you are working on);
+### How to use:  - set path to local statcheck
+###              - run the suite.R script which is contained in the same folder as this script
+### Output: If the updated/local function works as expected reports: ok
+###         if not, reports the number of things that are done wrong
 
 context('STATCHEK: different spacings')
 

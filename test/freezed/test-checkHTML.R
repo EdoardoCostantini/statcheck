@@ -1,22 +1,22 @@
 ### Project:     statcheck traineeship
-### Object:      Testing local checkPDF function against stable (CRAN) version
+### Object:      Testing local checkHTLM function against stable (CRAN) version
 ### Description: This script tests whether the extractions done using the stable 
-###              version of checkPDF (on CRAN) and the version on which you are
-###              working on (local) are giving the same results when applied to 
-###              a dummy PDF article containing a series of test of interest.
+###              version of checkHTML (on CRAN) and the version on which you are
+###              working on are giving the same results when applied to a dummy 
+###              article containing a series of test of interest.
 ###              The criteria of comparison are: 1) number of extractions, 
 ###                                              2) number of errors, 
 ###                                              3) number of decision errors
-### Requirements: (1) having a dummy PDF article;
-### How to use:  - set path to local statcheck and PDFimport scripts (containing 
-###                the versions of the functions you are working on)
+### Requirements: (1) having a dummy HTML article;
+### How to use:  - set path to local statcheck and htmlImport scripts (containing the
+###		   versions of the function you are working on)
 ###              - set path to dummy article
 ###              - run the suite.R script which is contained in the same folder as this script
 ### Output: If the number of extractions are the same the output reports: ok
 ###         if they do not, the difference between them is reported; positive difference
 ###         means that the tested version (i.e. local) reports more than benchmark does
 
-context('PDF IMPORT: checkPDF output local = CRAN')
+context('HTML IMPORT: checkHTLM output local = CRAN')
 
 # Set Up ------------------------------------------------------------------
 
@@ -24,46 +24,33 @@ context('PDF IMPORT: checkPDF output local = CRAN')
   #   setwd("/Users/Edoardo/DriveUni/gh-statcheck/test")
   # # packages
   #   library(testthat)
-  #   library(stringi) # need for the getPDF function
   #   library(plyr) # for function ddply (need for the auto_test feature)
   # # Source Functions to be tested (local versions, not from package)
      source("../R/statcheck.R")
-     source("../R/PDFimport.R")
-     source("../R/pdf_columns.R") # used by getPDF inside PDFimport script
+     source("../R/htmlImport.R")
 
 # Locations: specify the test article location
 
-  x <- "./articles/articles_PDF_trial/TrialArticle.pdf"
+  x <- "./articles/articles_HTML_csv/TrialArt.html"
 
-# Get output from working and stable function
-  quiet(working_out <- checkPDF(x))           # output from working version
-  quiet(stable_out <- statcheck::checkPDF(x)) # output from stable version
-  
 # Tests Specification -----------------------------------------------------
-  
+
+# Get output from local and CRAN functions
+  quiet(working_out <- checkHTML(x))            # output from working version
+  quiet(stable_out  <- statcheck::checkHTML(x)) # output from stable version
+
 #> Number of extractions     ####
   
-  nextra <- nrow(working_out)        # number of extractions
-    if( is.null( nextra ) == TRUE ){ # if statcheck does not find any statistic, returns a 0
-      tocheck <- 0
-    } else {
-      tocheck <- nextra
-    }
-
+  tocheck   <- nrow(working_out)
   benchmark <- nrow(stable_out)
-  
+
   test_that('TEST: Number of extractions', {
     expect_equal(tocheck, benchmark)
   })
   
 #> Number of Errors          ####
   
-  nerror <- sum(na.omit(working_out$Error))        # number of extractions
-    if( is.null( nerror ) == TRUE ){               # if statcheck does not find any statistic, returns a 0
-      tocheck <- 0
-    } else {
-      tocheck <- nerror
-    }
+  tocheck   <- sum(na.omit(working_out$Error))
   benchmark <- sum(na.omit(stable_out$Error))
 
   test_that('TEST: Number of errors', {
@@ -71,13 +58,8 @@ context('PDF IMPORT: checkPDF output local = CRAN')
   })
   
 #> Number of Decision Errors ####
-
-  nerror <- sum(na.omit(working_out$DecisionError))# number of extractions
-    if( is.null( nerror ) == TRUE ){               # if statcheck does not find any statistic, returns a 0
-      tocheck <- 0
-    } else {
-      tocheck <- nerror
-    } 
+  
+  tocheck   <- sum(na.omit(working_out$DecisionError))
   benchmark <- sum(na.omit(stable_out$DecisionError))
   
   test_that('TEST: Number of decision errors', {

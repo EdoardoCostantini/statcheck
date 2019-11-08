@@ -11,10 +11,25 @@
 ###              - run autotest function
 ### Date:        2019-03-20
 
-library(testthat)
-library(ddpcr)
-library(stringi)
-library(plyr)
+# Packages
+# install.packages(c("statcheck",
+#                    "testthat", 
+#                    "pdftools",
+#                    "ddpcr",
+#                    "stringi"))
+  
+  library(testthat) # for testing functions
+  library(pdftools) # for pdf_text function
+  library(ddpcr)    # for quiet function
+  library(stringi)  # for encoding functions
+  library(plyr)     # for functions needed by statcheck
+
+# Functions (local versions, not from package)
+
+# source("./R/statcheck.R")
+# source("./R/htmlImport.R") 
+# source("./R/PDFimport.R")
+# source("./R/pdf_columns.R") # used by getPDF inside PDFimport script
 
 # Set up
   # ! WD: should be project location (main folder)
@@ -22,15 +37,15 @@ library(plyr)
   test_path <- "./test" #path to folder containing different test-name.R scripts
 
 # Autotest
-  auto_test(code_path, test_path, reporter = TapReporter)
+  testthat::auto_test(code_path, test_path, reporter = TapReporter)
 
 # Reporter choices:
 # - LocationReporter: prints the location of every expectation and error
 # - TapReporter: "ok 1 TEST: different comparison sings" (good for mismatch report)
 
 # Output Interpretation:
-# - Mismatch: if a mismatch between "tocheck" and "benchmark" appears, it means that the changes 
-#   applied to the function of interest (e.g. statcheck) are providing different results from the 
+# - Mismatch: if a mismatch between "tocheck" and "benchmark" appears, it means that the changes
+#   applied to the function of interest (e.g. statcheck) are providing different results from the
 #   stable function used in the package at the moment. When a mismatch ooccurs, testthat output
 #   shows a difference. The first number is always the number of extraction obtained with the
 #   function you are working on and the second one is always the number of extractions obtained
@@ -38,3 +53,9 @@ library(plyr)
 #   script and line is the test that is failing.
 # - Running tests: if the last line in the console is "Rerunning tests:  test-name.R"
 #   it means that R is still (re)running a test.
+  
+# Running Tests independently:
+#  When running tests independently, use the following setwd
+#  setwd("/Users/Edoardo/DriveUni/gh-statcheck/test")
+#  because of the way autotest work, I assume the folder is
+#  test, where the auto_test script is located
